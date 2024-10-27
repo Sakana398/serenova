@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 void main() {
-  runApp(MentalHealthApp());
+  runApp(const MentalHealthApp());
 }
 
 class MentalHealthApp extends StatelessWidget {
@@ -15,7 +15,7 @@ class MentalHealthApp extends StatelessWidget {
         primarySwatch: Colors.blue,
         visualDensity: VisualDensity.adaptivePlatformDensity,
       ),
-      home: HomePage(),6
+      home: const HomePage(),
     );
   }
 }
@@ -127,6 +127,11 @@ class HomePage extends StatelessWidget {
                 ElevatedButton.icon(
                   onPressed: () {
                     // TODO: Navigate to profile
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder:(context) => ProfileLoginPage()),
+                    );
+                    
                   },
                   icon: const Icon(Icons.person),
                   label: const Text('Profile'),
@@ -134,6 +139,108 @@ class HomePage extends StatelessWidget {
               ],
             ),
           ],
+        ),
+      ),
+    );
+  }
+}
+
+class ProfileLoginPage extends StatefulWidget {
+  const ProfileLoginPage({super.key});
+
+  @override
+  _ProfileLoginPageState createState() => _ProfileLoginPageState();
+}
+
+class _ProfileLoginPageState extends State<ProfileLoginPage> {
+  final TextEditingController _emailController = TextEditingController();
+  final TextEditingController _passwordController = TextEditingController();
+  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+
+  // Function to handle login action
+  void _login() {
+    if (_formKey.currentState!.validate()) {
+      // Perform login action here, such as sending to an API
+      print('Email: ${_emailController.text}');
+      print('Password: ${_passwordController.text}');
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Login Successful')),
+      );
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('Profile Login'),
+      ),
+      body: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: Center(  // Center the entire content
+          child: SingleChildScrollView(  // Make it scrollable
+            child: Form(
+              key: _formKey,
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  // Profile Picture
+                  CircleAvatar(
+                    radius: 50,  // Adjust the size of the avatar
+                    backgroundImage: NetworkImage(
+                      'https://images.app.goo.gl/iPPCNB45ah8SVt2P9',  // Placeholder image URL
+                    ),
+                    backgroundColor: Colors.grey.shade200,  // Background color if image not loaded
+                  ),
+                  const SizedBox(height: 30),  // Space between avatar and email field
+
+                  // Email TextField
+                  TextFormField(
+                    controller: _emailController,
+                    keyboardType: TextInputType.emailAddress,
+                    decoration: const InputDecoration(
+                      labelText: 'Email',
+                      border: OutlineInputBorder(),
+                    ),
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return 'Please enter your email';
+                      } else if (!RegExp(r'^[^@]+@[^@]+\.[^@]+').hasMatch(value)) {
+                        return 'Please enter a valid email address';
+                      }
+                      return null;
+                    },
+                  ),
+                  const SizedBox(height: 20),
+
+                  // Password TextField
+                  TextFormField(
+                    controller: _passwordController,
+                    obscureText: true,
+                    decoration: const InputDecoration(
+                      labelText: 'Password',
+                      border: OutlineInputBorder(),
+                    ),
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return 'Please enter your password';
+                      } else if (value.length < 6) {
+                        return 'Password must be at least 6 characters long';
+                      }
+                      return null;
+                    },
+                  ),
+                  const SizedBox(height: 20),
+
+                  // Login Button
+                  ElevatedButton(
+                    onPressed: _login,
+                    child: const Text('Login'),
+                  ),
+                ],
+              ),
+            ),
+          ),
         ),
       ),
     );
