@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 void main() {
-  runApp(MentalHealthApp());
+  runApp(const MentalHealthApp());
 }
 
 class MentalHealthApp extends StatelessWidget {
@@ -13,7 +13,7 @@ class MentalHealthApp extends StatelessWidget {
         primarySwatch: Colors.blue,
         visualDensity: VisualDensity.adaptivePlatformDensity,
       ),
-      home: HomePage(),
+      home: HomePage(),6
     );
   }
 }
@@ -123,6 +123,11 @@ class HomePage extends StatelessWidget {
                 ElevatedButton.icon(
                   onPressed: () {
                     // TODO: Navigate to profile
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder:(context) => ProfileLoginPage()),
+                    );
+                    
                   },
                   icon: Icon(Icons.person),
                   label: Text('Profile'),
