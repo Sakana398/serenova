@@ -52,7 +52,10 @@ class HomePage extends StatelessWidget {
                 title: Text('Mental Health Status'),
                 subtitle: Text('Click to check your current status'),
                 onTap: () {
-                  // TODO: Navigate to mental health status page
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => MentalHealthStatusPage()),
+                  );
                 },
               ),
             ),
@@ -128,6 +131,106 @@ class HomePage extends StatelessWidget {
                   label: Text('Profile'),
                 ),
               ],
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class MentalHealthStatusPage extends StatefulWidget {
+  @override
+  _MentalHealthStatusPageState createState() => _MentalHealthStatusPageState();
+}
+
+class _MentalHealthStatusPageState extends State<MentalHealthStatusPage> {
+  int moodRating = 3;
+  String sleepQuality = 'Normal';
+  String eatingQuality = 'Balanced';
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('Mental Health Status'),
+      ),
+      body: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              'Rate your mood today:',
+              style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+            ),
+            Slider(
+              value: moodRating.toDouble(),
+              min: 1,
+              max: 5,
+              divisions: 4,
+              label: moodRating.toString(),
+              onChanged: (value) {
+                setState(() {
+                  moodRating = value.toInt();
+                });
+              },
+            ),
+            Text(
+              'Your sleep quality today:',
+              style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+            ),
+            DropdownButton<String>(
+              value: sleepQuality,
+              onChanged: (String? newValue) {
+                setState(() {
+                  sleepQuality = newValue!;
+                });
+              },
+              items: <String>['Good', 'Normal', 'Bad']
+                  .map<DropdownMenuItem<String>>((String value) {
+                return DropdownMenuItem<String>(
+                  value: value,
+                  child: Text(value),
+                );
+              }).toList(),
+            ),
+            Text(
+              'How was your eating today?',
+              style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+            ),
+            DropdownButton<String>(
+              value: eatingQuality,
+              onChanged: (String? newValue) {
+                setState(() {
+                  eatingQuality = newValue!;
+                });
+              },
+              items: <String>['Balanced', 'Overate', 'Undereat']
+                  .map<DropdownMenuItem<String>>((String value) {
+                return DropdownMenuItem<String>(
+                  value: value,
+                  child: Text(value),
+                );
+              }).toList(),
+            ),
+            SizedBox(height: 30),
+            Text(
+              'Status Summary:',
+              style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+            ),
+            SizedBox(height: 10),
+            Text(
+              'Mood Rating: $moodRating',
+              style: TextStyle(fontSize: 16),
+            ),
+            Text(
+              'Sleep Quality: $sleepQuality',
+              style: TextStyle(fontSize: 16),
+            ),
+            Text(
+              'Eating Habits: $eatingQuality',
+              style: TextStyle(fontSize: 16),
             ),
           ],
         ),
